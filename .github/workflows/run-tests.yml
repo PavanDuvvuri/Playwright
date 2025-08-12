@@ -1,39 +1,36 @@
-name: Run API and UI Tests
+name: Run Playwright Tests
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   test:
-    name: Run Tests (API + UI)
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: ⚙️ Setup .NET SDK
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'  # Change based on your project version
+          dotnet-version: '8.0.x'
 
-      - name: 📦 Restore NuGet packages
+      - name: Restore dependencies
         run: dotnet restore
 
-      - name: 🛠 Build solution
-        run: dotnet build --configuration Release --no-restore
+      - name: Build solution
+        run: dotnet build --configuration Release
 
-      - name: 🚀 Install Playwright CLI
+      - name: Install Playwright CLI
         run: dotnet tool install --global Microsoft.Playwright.CLI
 
       - name: Add .dotnet/tools to PATH
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
-      - name: 🌐 Install Playwright browsers
+      - name: Install Playwright Browsers
         run: dotnet playwright install
 
-      - name: 🧪 Run all tests (headless by default)
-        run: dotnet test --configuration Release --no-build --verbosity normal
+      - name: Run Tests
+        run: dotnet test --configuration Release --no-build
