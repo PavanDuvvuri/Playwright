@@ -24,7 +24,13 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Install Playwright Browsers
-        run: ./bin/Release/net8.0/playwright.sh install --with-deps
-
+        run: dotnet new tool-manifest
+        
+       - name: Manifest
+        run: dotnet add package Microsoft.Playwright.CLI
+        
+       -name: Install
+        run: dotnet playwright install
+        
       - name: Run tests
         run: dotnet test --configuration Release --no-build
