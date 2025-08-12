@@ -24,12 +24,6 @@ jobs:
         run: dotnet build PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj --configuration Release
 
       - name: Install Playwright Browsers
-        run: dotnet new tool-manifest
-
-      - name: Install
-        run: dotnet add package Microsoft.Playwright.CLI --project ./PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj  
-        
-      - name: Manifest
         run: dotnet playwright install --project ./PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj
         
       - name: Run tests
