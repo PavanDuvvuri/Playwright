@@ -25,11 +25,11 @@ jobs:
 
       - name: Install Playwright Browsers
         run: dotnet new tool-manifest
-        
-       - name: Manifest
+
+      - name: Install
         run: dotnet add package Microsoft.Playwright.CLI
         
-       -name: Install
+      - name: Manifest
         run: dotnet playwright install
         
       - name: Run tests
