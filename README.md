@@ -1,0 +1,2 @@
+# Playwright
+dotnet playwright
