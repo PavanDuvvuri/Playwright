@@ -24,7 +24,8 @@ jobs:
         run: dotnet build PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj --configuration Release
 
       - name: Install Playwright Browsers
-        run: dotnet playwright install --project ./PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj
+        working-directory: PRESERVICA.NASA.DEMO/
+        run: dotnet playwright install
         
       - name: Run tests
         run: dotnet test --configuration Release --no-build
