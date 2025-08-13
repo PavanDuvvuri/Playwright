@@ -23,7 +23,7 @@ namespace PRESERVICA.NASA.DEMO.StepDefinitions
         }
 
         [Given("I have created a Coronal Mass Ejection Get Request for (.*)")]
-        public async Task GivenIHaveCreatedACoronalMassEjectionGetRequestForValidRequest(string testScenario)
+        public void GivenIHaveCreatedACoronalMassEjectionGetRequestForValidRequest(string testScenario)
         {
             var startTime = DateTime.UtcNow.AddDays(-30).ToString("yyyy-MM-dd");
             _context.Add("startTime", startTime);
@@ -52,7 +52,7 @@ namespace PRESERVICA.NASA.DEMO.StepDefinitions
         }
 
         [Given("I have created a Solar Flare Ejection Get Request for (.*)")]
-        public async Task GivenIHaveCreatedASolarFlareEjectionGetRequestForValidRequest(string testScenario)
+        public void GivenIHaveCreatedASolarFlareEjectionGetRequestForValidRequest(string testScenario)
         {
             var startTime = DateTime.UtcNow.AddDays(-30).ToString("yyyy-MM-dd");
             _context.Add("startTime", startTime);
@@ -81,7 +81,7 @@ namespace PRESERVICA.NASA.DEMO.StepDefinitions
         }
 
         [When("the request is sent to the NASA API")]
-        public async Task WhenTheRequestIsSentToTheNASAAPI()
+        public void WhenTheRequestIsSentToTheNASAAPI()
         {
             var endpoint = _config.APIHost();
             var request = _context.Get<RestRequest>("request");
@@ -99,13 +99,13 @@ namespace PRESERVICA.NASA.DEMO.StepDefinitions
         }
 
         [Then("no exceptions should be thrown")]
-        public async Task ThenNoExceptionsShouldBeThrown()
+        public void ThenNoExceptionsShouldBeThrown()
         {
             Assert.That(_context.TryGetValue("response-exception", out HttpRequestException _), Is.False);
         }
 
         [Then("the response status code should be (.*)")]
-        public async Task ThenTheResponseStatusCodeShouldBe(string statusCode)
+        public void ThenTheResponseStatusCodeShouldBe(string statusCode)
         {
            var response = _context.Get<RestResponse>("response");
           
@@ -123,22 +123,29 @@ namespace PRESERVICA.NASA.DEMO.StepDefinitions
         }
 
         [Then("the response should contain (.*) with (.*)")]
-        public async Task ThenTheResponseShouldContainWith(string responseData, string message)
+        public void ThenTheResponseShouldContainWith(string responseData, string message)
         {
             if(responseData == "Success")
             {
                 var response = _context.Get<RestResponse>("response");
-                var array = JArray.Parse(response.Content);
-                //var jObject = JObject.Parse(response.Content.ReadAsStringAsync());
-                string id = array[0][message]?.ToString();
+                if (string.IsNullOrWhiteSpace(response.Content))
+                {
+                    Assert.Fail("Response content is null or empty.");
+                }
+                var array = JArray.Parse(response.Content!);
+                string? id = array[0]?[message]?.ToString();
 
-                Assert.That(id.Contains("CME") || id.Contains("FLR"), "ID should not be null or empty.");
+                Assert.That(!string.IsNullOrEmpty(id) && (id.Contains("CME") || id.Contains("FLR")), "ID should not be null or empty.");
             }
             else if (responseData == "Failed")
             {
                 var response = _context.Get<RestResponse>("response");
-                var jObject = JObject.Parse(response.Content);
-                string errorMessage = (string)jObject["error"]["code"];
+                if (string.IsNullOrWhiteSpace(response.Content))
+                {
+                    Assert.Fail("Response content is null or empty.");
+                }
+                var jObject = JObject.Parse(response.Content!);
+                string? errorMessage = jObject["error"]?["code"]?.ToString();
                 Assert.That(errorMessage, Is.EqualTo(message), $"Expected error message '{message}' but got '{errorMessage}'");
             }
             else if(responseData == "")

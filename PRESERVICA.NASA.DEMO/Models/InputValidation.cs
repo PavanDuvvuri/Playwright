@@ -8,8 +8,7 @@ namespace PRESERVICA.NASA.DEMO.Models
 {
     public class InputValidation
     {
-        public string FieldName { get; set; }
-        public string ErrorMessage { get; set; }
-        public string InputScenario { get; set; }
+        public string FieldName { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 }

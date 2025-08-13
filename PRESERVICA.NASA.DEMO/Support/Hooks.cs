@@ -27,7 +27,7 @@ namespace PRESERVICA.NASA.DEMO.Support
             Console.WriteLine("Before Test Run: Initializing resources...");
         }
         [BeforeScenario]
-        public async Task BeforeScenario()
+        public static void BeforeScenario()
         {
             // This method runs before each scenario.
             Console.WriteLine("Before Scenario: Setting up the environment...");

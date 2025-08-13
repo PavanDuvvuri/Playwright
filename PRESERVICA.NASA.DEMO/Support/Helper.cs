@@ -12,8 +12,8 @@ namespace PRESERVICA.NASA.DEMO.Support
 {
     public class Helper
     {
-        public static RestClient client;
-        public static RestRequest restRequest;
+        public static RestClient? client;
+        public static RestRequest? restRequest;
         private readonly IDictionary<string, string> _context;
 
         public Helper(IDictionary<string, string> context)
