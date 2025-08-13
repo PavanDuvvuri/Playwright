@@ -22,9 +22,13 @@ jobs:
 
       - name: Build project
         run: dotnet build PRESERVICA.NASA.DEMO/PRESERVICA.NASA.DEMO.csproj --configuration Release
+        
+      - name: Restore local .NET tools
+        working-directory: PRESERVICA.NASA.DEMO
+        run: dotnet tool restore
 
       - name: Install Playwright Browsers
-        working-directory: PRESERVICA.NASA.DEMO/
+        working-directory: PRESERVICA.NASA.DEMO
         run: dotnet playwright install
         
       - name: Run tests
